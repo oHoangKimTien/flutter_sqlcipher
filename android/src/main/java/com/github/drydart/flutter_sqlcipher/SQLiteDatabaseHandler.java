@@ -445,9 +445,30 @@ class SQLiteDatabaseHandler extends FlutterMethodCallHandler {
   convertMapToContentValues(final Map<String, Object> input) {
     assert(input != null);
 
-    final Parcel parcel = Parcel.obtain();
-    parcel.writeMap(input);
-    parcel.setDataPosition(0);
-    return ContentValues.CREATOR.createFromParcel(parcel);
+    ContentValues contentValues = new ContentValues();
+    for (Map.Entry<String, Object> entry : input.entrySet()) {
+      Object value = entry.getValue();
+      String key = entry.getKey();
+
+      if (value instanceof Integer) {
+        contentValues.put(key, (Integer) value);
+      } else if (value instanceof Long) {
+        contentValues.put(key, (Long) value);
+      } else if (value instanceof Short) {
+        contentValues.put(key, (Short) value);
+      } else if (value instanceof Float) {
+        contentValues.put(key, (Float) value);
+      } else if (value instanceof Double) {
+        contentValues.put(key, (Double) value);
+      } else if (value instanceof Byte) {
+        contentValues.put(key, (Byte) value);
+      } else if (value instanceof Boolean) {
+        contentValues.put(key, (Boolean) value);
+      } else if (value instanceof String) {
+        contentValues.put(key, ((value == null) ? "" : (String) value));
+      }
+    }
+
+    return contentValues;
   }
 }
