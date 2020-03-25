@@ -432,6 +432,19 @@ class SQLiteDatabaseHandler extends FlutterMethodCallHandler {
 
   private SQLiteDatabase
   getDatabaseArgument(final MethodCall call) {
+    assert(call != null);
+
+    final int id = getRequiredArgument(call, "id");
+    if (!this.databases.containsKey(id)) {
+      throw new AssertionError();
+    }
+    return this.databases.get(id);
+  }
+
+  private static ContentValues
+  convertMapToContentValues(final Map<String, Object> input) {
+    assert(input != null);
+
     ContentValues contentValues = new ContentValues();
     for (Map.Entry<String, Object> entry : input.entrySet()) {
       Object value = entry.getValue();
